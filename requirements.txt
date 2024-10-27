@@ -1,0 +1,8 @@
+tensorflow
+numpy
+pipreqs
+pyaudio
+picamera
+mfrc522
+spidev
+pyfingerprint
