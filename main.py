@@ -79,22 +79,22 @@ def identify():
     print("starting verification process...")
 
     # verification step 1, return value string of user name
-    # first_user = // call function for step 1 here
-    #
+    first_user = rfid.verify()
+    
     # verification step 2
-    # next_step_user = // call function for step 2 here
+    next_step_user = camera.verify()
     if first_user != next_step_user :
         current_mode = "READY"
         return
     
     # verification step 3
-    # next_step_user = // call function for step 3 here
+    next_step_user = microphone.verify()
     if first_user != next_step_user :
         current_mode = "READY"
         return
     
     # verification step 4
-    # next_step_user = // call function for step 4 here
+    next_step_user = fingerprint.verify()
     if first_user != next_step_user :
         current_mode = "READY"
         return
