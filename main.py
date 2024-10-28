@@ -73,20 +73,31 @@ def button_press_callback(channel):
 
 def identify():
     global current_mode
-    current_user = ""
+    first_user = "Nobody"
+    next_step_user = ""
 
     print("starting verification process...")
 
-
-    # enter all verification steps here
-
-    # if any verification step failed
-    # perform the following code lines:
+    # verification step 1, return value string of user name
+    # first_user = // call function for step 1 here
     #
-    # current_mode = "READY"
-    # //optional error message / blinking light / etc.
-    # return
-
+    # verification step 2
+    # next_step_user = // call function for step 2 here
+    if first_user != next_step_user :
+        current_mode = "READY"
+        return
+    
+    # verification step 3
+    # next_step_user = // call function for step 3 here
+    if first_user != next_step_user :
+        current_mode = "READY"
+        return
+    
+    # verification step 4
+    # next_step_user = // call function for step 4 here
+    if first_user != next_step_user :
+        current_mode = "READY"
+        return
 
 
     print("User verified, opening lock...")
@@ -136,7 +147,7 @@ def main():
     ## Start of loop
     global current_mode
     while True:
-        
+
         # optionally go from ready state directly to 
         # current_mode = "VERIFICATION" 
         # and wait for start by RFID etc. instead of the button press
