@@ -8,7 +8,7 @@ import RPi.GPIO as GPIO
 from mfrc522 import SimpleMFRC522
 
 
-
+Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
 
 
 
@@ -40,3 +40,20 @@ def check_rfid_tag(reader, expected_tag_id):
             print(f"Error Reading RFID-Tag: {e}")
             time.sleep(1)  # Wait before trying again
 
+
+def verify():
+    detected_user = ""
+
+    ## do verification here
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+
+
+    return detected_user

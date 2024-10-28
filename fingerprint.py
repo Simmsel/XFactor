@@ -3,6 +3,9 @@ from pyfingerprint.pyfingerprint import PyFingerprint
 import time
 
 
+Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
+
+
 def init_fingerprint_sensor():
     try:
         print("Initializing fingerprint sensor connection")
@@ -37,3 +40,22 @@ def read_finger(sensor):
         except Exception as e:
             print(f"Error reading fingerprint: {e}")
             time.sleep(1)
+
+
+
+def verify():
+    detected_user = ""
+
+    ## do verification here
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+
+
+    return detected_user

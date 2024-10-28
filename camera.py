@@ -2,6 +2,10 @@ import time
 import picamera
 
 
+Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
+
+
+
 def init():
     print("Initializing camera connection")
     try:
@@ -22,3 +26,22 @@ def take_picture(camera, filename='image.jpg'):
     else:
         print("Camera not initialized. Picture unsuccessfull.")
 
+
+
+
+def verify():
+    detected_user = ""
+
+    ## do verification here
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+
+
+    return detected_user

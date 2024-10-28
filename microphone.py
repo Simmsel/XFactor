@@ -3,6 +3,7 @@ import pyaudio
 import wave
 
 
+Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
 
 
 def init():
@@ -58,3 +59,22 @@ def record_audio(filename='output.wav', duration=5, chunk=1024, channels=1, rate
         wf.writeframes(b''.join(frames))
 
     print(f"Aufnahme gespeichert als {filename}")
+
+
+
+def verify():
+    detected_user = ""
+
+    ## do verification here
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+
+
+    return detected_user
