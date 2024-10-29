@@ -79,22 +79,31 @@ def identify():
 
     print("starting verification process...")
 
+    # reseting LEDs
+    for l in LEDs:
+        led.control(l, GPIO.LOW)
+
     # verification step 1, return value string of user name
+    led.control(LEDs[0], GPIO.HIGH)
     first_user = rfid.verify()
     
+
     # verification step 2
+    led.control(LEDs[1], GPIO.HIGH)
     next_step_user = camera.verify()
     if first_user != next_step_user :
         current_mode = "READY"
         return
     
     # verification step 3
+    led.control(LEDs[2], GPIO.HIGH)
     next_step_user = microphone.verify()
     if first_user != next_step_user :
         current_mode = "READY"
         return
     
     # verification step 4
+    led.control(LEDs[3], GPIO.HIGH)
     next_step_user = fingerprint.verify()
     if first_user != next_step_user :
         current_mode = "READY"
@@ -163,6 +172,10 @@ def main():
         # and wait for start by RFID etc. instead of the button press
 
         if current_mode == "READY":
+            # reseting LEDs
+            for l in LEDs:
+                led.control(l, GPIO.LOW)
+                
             print("Startup-mode: waiting for press of button...")
             time.sleep(1)
 

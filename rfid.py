@@ -11,6 +11,14 @@ from mfrc522 import SimpleMFRC522
 Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
 
 
+# example values, insert actual RFID Tag values here
+TAG_LISTS = [
+    248491346734,
+    127346721368,
+    120934609721,
+    245934175389
+]
+
 
 def init_rfid_reader():
     print("Initializing RFID-sensor connection")
@@ -44,16 +52,22 @@ def check_rfid_tag(reader, expected_tag_id):
 def verify():
     detected_user = ""
 
-    ## do verification here
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
+    reader = SimpleMFRC522()
 
+    print("Please present RFID-TAG...")
+    while True:
+        try:
+            # wait for tag and read ID
+            tag_id, text = reader.read()
+            print(f"Tag ID: {tag_id}, Text: {text.strip()}")
+
+            if tag_id in TAG_LISTS:
+                print("Right RFID-Tag detected!")
+                return text
+            else:
+                print("Wrong RFID-Tag. Please try again.")
+        except Exception as e:
+            print(f"Error Reading RFID-Tag: {e}")
+            time.sleep(0.2)  # Wait before trying again
 
     return detected_user
