@@ -1,7 +1,10 @@
 ## IMPORTS
 import pyaudio
 import wave
-
+import numpy as np
+import tensorflow as tf
+from scipy.io import wavfile
+from scipy.fft import fft
 
 Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
 
@@ -67,7 +70,11 @@ def verify():
 
     ## do verification here
     #
-    #
+    ## Load audio file
+    # sample_rate, data = wavfile.read('audio_file.wav')
+
+    # Perform FFT
+    # fft_result = fft(data)
     #
     #
     #

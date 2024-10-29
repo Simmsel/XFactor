@@ -28,7 +28,7 @@ import os
 
 
 # GPIO PINS
-BUTTON_PIN = 6
+RESET_BUTTON_PIN = 6
 LED1_PIN = 17
 LED2_PIN = 27
 LED3_PIN = 22
@@ -58,7 +58,7 @@ def button_press_callback(channel):
         hold_start = time.time()
         
         # Check for 5 seconds button press
-        while GPIO.input(BUTTON_PIN) == GPIO.LOW:
+        while GPIO.input(RESET_BUTTON_PIN) == GPIO.LOW:
             if time.time() - hold_start >= 5:
                 print("Reboot initiated...")
                 
@@ -137,7 +137,7 @@ def main():
 
     # Initializing GPIOs
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(RESET_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     led.init_gpio(LED1_PIN)
     led.init_gpio(LED2_PIN)
     led.init_gpio(LED3_PIN)

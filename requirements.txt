@@ -6,3 +6,5 @@ picamera
 mfrc522
 spidev
 pyfingerprint
+tflite-runtime
+scipy

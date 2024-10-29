@@ -1,5 +1,8 @@
 import time
 import picamera
+import numpy as np
+import tensorflow as tf
+
 
 
 Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
