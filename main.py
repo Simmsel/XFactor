@@ -147,7 +147,6 @@ def main():
 
     ## Initialization of components
     print("Initializing ...")
-    motor.init()
     microphone.init()
     camera.init()
     fingerprint.init()

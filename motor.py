@@ -4,18 +4,17 @@ import time
 OPEN_ANGLE = 90
 CLOSE_ANGLE = 0
 
-def init():
-    SERVO_PIN = 12
+SERVO_PIN = 13
 
 
 
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(SERVO_PIN, GPIO.OUT)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(SERVO_PIN, GPIO.OUT)
 
 
 
-    pwm = GPIO.PWM(SERVO_PIN, 50)  # 50 Hz for SG90 Servos
-    pwm.start(0)
+pwm = GPIO.PWM(SERVO_PIN, 50)  # 50 Hz for SG90 Servos
+pwm.start(0)
 
 
 
