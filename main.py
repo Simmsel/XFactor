@@ -33,11 +33,12 @@ LED1_PIN = 17
 LED2_PIN = 27
 LED3_PIN = 22
 LED4_PIN = 5
-
+LEDs = [LED1_PIN, LED2_PIN, LED3_PIN, LED4_PIN]
 
 # VARIABLES
 Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
 current_mode = "READY"
+OPEN_TIME = 5 # specified in seconds
 
 
 
@@ -110,7 +111,16 @@ def unlock():
 
     print("Lock open for 5 secods...")
     motor.open()
-    time.sleep(5)
+
+
+    # what to do while box is open
+    # speaker.playback(Opening sound) # optionally
+    start_time = time.time()
+
+    while time.time() - start_time < OPEN_TIME:
+        led.led_blink()
+        time.sleep(0.1)
+
     motor.close()
 
     global current_mode
