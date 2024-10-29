@@ -3,6 +3,7 @@ import picamera
 import numpy as np
 import tensorflow as tf
 
+## FaceNet ( Google) -> might be good for face recognition
 
 
 Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]

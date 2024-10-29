@@ -6,6 +6,10 @@ import tensorflow as tf
 from scipy.io import wavfile
 from scipy.fft import fft
 
+
+##YAMNet for audio calssification? can it also specify between different voices or just recognize audio?
+
+
 Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
 
 
