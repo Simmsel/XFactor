@@ -1,13 +1,13 @@
 import RPi.GPIO as GPIO
 import time
 
-
+OPEN_ANGLE = 90
+CLOSE_ANGLE = 0
 
 def init():
     SERVO_PIN = 12
 
-    OPEN_ANGLE = 90
-    CLOSE_ANGLE = 0
+
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(SERVO_PIN, GPIO.OUT)
