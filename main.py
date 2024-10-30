@@ -49,22 +49,16 @@ OPEN_TIME = 5 # specified in seconds
 # Callback-Funktion für den Knopf-Interrupt
 
 def button_press_callback(channel):
-    global current_mode
-    if current_mode == "READY":
-        print("Button pressed, starting user identification...")
-        current_mode = "VERIFICATION"
+    hold_start = time.time()
 
-    elif current_mode == "VERIFICATION":
-        hold_start = time.time()
-        
-        # Check for 5 seconds button press
-        while GPIO.input(RESET_BUTTON_PIN) == GPIO.LOW:
-            if time.time() - hold_start >= 5:
-                print("Reboot initiated...")
+    # Check for 5 seconds button press
+    while GPIO.input(RESET_BUTTON_PIN) == GPIO.HIGH:
+        if time.time() - hold_start >= 5:
+            print("Reboot initiated...")
                 
-                os.system("sudo reboot")
-                return
-            time.sleep(0.1)  # Polling-Intervall
+            os.system("sudo reboot")
+            return
+        time.sleep(0.1)  # Polling-Intervall
 
 
 
@@ -171,15 +165,7 @@ def main():
         # current_mode = "VERIFICATION" 
         # and wait for start by RFID etc. instead of the button press
 
-        if current_mode == "READY":
-            # reseting LEDs
-            for l in LEDs:
-                led.control(l, GPIO.LOW)
-                
-            print("Startup-mode: waiting for press of button...")
-            time.sleep(1)
-
-        elif current_mode == "VERIFICATION":
+        if current_mode == "VERIFICATION":
             identify()
 
         elif current_mode == "OPENING":

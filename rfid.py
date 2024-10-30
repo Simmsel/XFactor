@@ -1,5 +1,7 @@
-# https://devdrik.de/pi-mit-rfid-rc522/
-
+# Student card IDs
+# MoritzG
+# MoritzR
+# Gabriel
 
 # IMPORTS
 
@@ -8,16 +10,12 @@ import RPi.GPIO as GPIO
 from mfrc522 import SimpleMFRC522
 
 
-Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
+tag_database = {
+    1069488694246: "Simon",
+    588620194713: "Jonathan",
+    932268172086: "Nico"
+}
 
-
-# example values, insert actual RFID Tag values here
-TAG_LISTS = [
-    920725831487,
-    127346721368,
-    120934609721,
-    245934175389
-]
 
 
 def init():
@@ -30,44 +28,16 @@ def init():
         print(f"Error initializing RFID-reader: {e}")
         return None
 
-    
-def check_rfid_tag(reader, expected_tag_id):
-    print("Please present RFID-TAG...")
-    while True:
-        try:
-            # wait for tag and read ID
-            tag_id, text = reader.read()
-            print(f"Tag ID: {tag_id}, Text: {text.strip()}")
-
-            if tag_id == expected_tag_id:
-                print("Right RFID-Tag detected!")
-                break
-            else:
-                print("Wrong RFID-Tag. Please try again.")
-        except Exception as e:
-            print(f"Error Reading RFID-Tag: {e}")
-            time.sleep(1)  # Wait before trying again
-
 
 def verify():
-    detected_user = ""
-
+    print("Bitte den RFID-Tag an das Lesegerät halten...")
     reader = SimpleMFRC522()
-
-    print("Please present RFID-TAG...")
-    while True:
-        try:
-            # wait for tag and read ID
-            tag_id, text = reader.read()
-            print(f"Tag ID: {tag_id}, Text: {text.strip()}")
-
-            if tag_id in TAG_LISTS:
-                print("Right RFID-Tag detected!")
-                return text
-            else:
-                print("Wrong RFID-Tag. Please try again.")
-        except Exception as e:
-            print(f"Error Reading RFID-Tag: {e}")
-            time.sleep(0.2)  # Wait before trying again
-
-    return detected_user
+    # Lese die Tag-Nummer ein
+    tag_id, _ = reader.read()
+    print(f"Tag-ID: {tag_id}")
+    
+    # Überprüfe, ob die Tag-ID in der Datenbank ist
+    if tag_id in tag_database:
+        return tag_database[tag_id]
+    else:
+        return "Unbekannter Tag"
