@@ -73,35 +73,33 @@ def identify():
 
     print("starting verification process...")
 
-    # reseting LEDs
-    for l in LEDs:
-        led.control(l, GPIO.LOW)
+
 
     # verification step 1, return value string of user name
     led.control(LEDs[0], GPIO.HIGH)
     first_user = rfid.verify()
     
 
-    # verification step 2
-    led.control(LEDs[1], GPIO.HIGH)
-    next_step_user = camera.verify()
-    if first_user != next_step_user :
-        current_mode = "READY"
-        return
+    # # verification step 2
+    # led.control(LEDs[1], GPIO.HIGH)
+    # next_step_user = fingerprint.verify()
+    # if first_user != next_step_user :
+    #     current_mode = "READY"
+    #     return
     
-    # verification step 3
-    led.control(LEDs[2], GPIO.HIGH)
-    next_step_user = microphone.verify()
-    if first_user != next_step_user :
-        current_mode = "READY"
-        return
+    # # verification step 3
+    # led.control(LEDs[2], GPIO.HIGH)
+    # next_step_user = camera.verify()
+    # if first_user != next_step_user :
+    #     current_mode = "READY"
+    #     return
     
-    # verification step 4
-    led.control(LEDs[3], GPIO.HIGH)
-    next_step_user = fingerprint.verify()
-    if first_user != next_step_user :
-        current_mode = "READY"
-        return
+    # # verification step 4
+    # led.control(LEDs[3], GPIO.HIGH)
+    # next_step_user = microphone.verify()
+    # if first_user != next_step_user :
+    #     current_mode = "READY"
+    #     return
 
 
     print("User verified, opening lock...")
@@ -150,22 +148,24 @@ def main():
 
     ## Initialization of components
     print("Initializing ...")
-    microphone.init()
-    camera.init()
-    fingerprint.init()
     rfid.init()
-
-
+    fingerprint.init()
+    # microphone.init()
+    # camera.init()
 
     ## Start of loop
     global current_mode
+
     while True:
 
-        # optionally go from ready state directly to 
-        # current_mode = "VERIFICATION" 
-        # and wait for start by RFID etc. instead of the button press
+        if current_mode == "READY":
+            # reseting LEDs
+            for l in LEDs:
+                led.control(l, GPIO.LOW)
 
-        if current_mode == "VERIFICATION":
+            current_mode = "VERIFICATION"
+
+        elif current_mode == "VERIFICATION":
             identify()
 
         elif current_mode == "OPENING":
