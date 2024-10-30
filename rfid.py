@@ -1,11 +1,4 @@
-# Student card IDs
-# MoritzG
-# MoritzR
-# Gabriel
-
 # IMPORTS
-
-import time
 from mfrc522 import SimpleMFRC522
 
 
@@ -28,12 +21,11 @@ def init():
 
 
 def verify():
+
     reader = SimpleMFRC522()
-    # Lese die Tag-Nummer ein
+
     tag_id, _ = reader.read()
-    print(f"Tag-ID: {tag_id}")
-    
-    # Überprüfe, ob die Tag-ID in der Datenbank ist
+
     if tag_id in tag_database:
         return tag_database[tag_id]
     else:

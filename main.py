@@ -75,9 +75,7 @@ def identify():
     first_user = "Nobody"
     next_step_user = ""
 
-    print("starting verification process...")
-    
-
+    helpers.clear_screen()
 
     # verification step 1, return value string of user name
     print("Bitte den RFID-Tag an das Lesegerät halten...")
@@ -86,6 +84,8 @@ def identify():
     if first_user == "UNKNOWN":
         current_mode = "READY"
         return
+    
+    print(f"Hello, {first_user}! Please continue with the verification steps.")
     
 
     # # verification step 2
@@ -179,10 +179,6 @@ def main():
 
         elif current_mode == "OPENING":
             unlock()
-
-
-
-
 
 
 

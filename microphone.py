@@ -5,9 +5,10 @@ import numpy as np
 import tensorflow as tf
 from scipy.io import wavfile
 from scipy.fft import fft
+import os
 
 
-##YAMNet for audio calssification? can it also specify between different voices or just recognize audio?
+##YAMNet for audio calssification? Make keyword checking instead of voice recognition?
 
 
 Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
@@ -67,6 +68,10 @@ def record_audio(filename='output.wav', duration=5, chunk=1024, channels=1, rate
 
     print(f"Aufnahme gespeichert als {filename}")
 
+
+def delete_audio(file_path):
+    if os.path.exists(file_path):
+        os.remove(file_path)
 
 
 def verify():
