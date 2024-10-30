@@ -13,7 +13,7 @@ Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige
 
 # example values, insert actual RFID Tag values here
 TAG_LISTS = [
-    248491346734,
+    920725831487,
     127346721368,
     120934609721,
     245934175389
