@@ -1,5 +1,20 @@
 ## main script to run on the raspi
 
+# GPIO PINS
+RESET_BUTTON_PIN = 6
+SERVO_PIN = 13
+LED1_PIN = 17
+LED2_PIN = 27
+LED3_PIN = 22
+LED4_PIN = 5
+LEDs = [LED1_PIN, LED2_PIN, LED3_PIN, LED4_PIN]
+
+OPEN_ANGLE = 90
+CLOSE_ANGLE = 0
+
+
+
+
 ## IMPORT Files
 
 import microphone
@@ -7,10 +22,9 @@ import camera
 import fingerprint
 import rfid
 import helpers
-import motor
 import speaker
 import led
-
+import motor
 
 
 
@@ -18,22 +32,12 @@ import led
 
 import tensorflow as tf
 import numpy as np
-import RPi.GPIO as GPIO
 import time
 import os
+import RPi.GPIO as GPIO
 
 
 
-
-
-
-# GPIO PINS
-RESET_BUTTON_PIN = 6
-LED1_PIN = 17
-LED2_PIN = 27
-LED3_PIN = 22
-LED4_PIN = 5
-LEDs = [LED1_PIN, LED2_PIN, LED3_PIN, LED4_PIN]
 
 # VARIABLES
 Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
@@ -72,30 +76,34 @@ def identify():
     next_step_user = ""
 
     print("starting verification process...")
-
+    
 
 
     # verification step 1, return value string of user name
-    led.control(LEDs[0], GPIO.HIGH)
+    print("Bitte den RFID-Tag an das Lesegerät halten...")
+    led.led_control(LEDs[0], GPIO.HIGH)
     first_user = rfid.verify()
+    if first_user == "UNKNOWN":
+        current_mode = "READY"
+        return
     
 
     # # verification step 2
-    # led.control(LEDs[1], GPIO.HIGH)
+    # led.led_control(LEDs[1], GPIO.HIGH)
     # next_step_user = fingerprint.verify()
     # if first_user != next_step_user :
     #     current_mode = "READY"
     #     return
     
     # # verification step 3
-    # led.control(LEDs[2], GPIO.HIGH)
+    # led.led_control(LEDs[2], GPIO.HIGH)
     # next_step_user = camera.verify()
     # if first_user != next_step_user :
     #     current_mode = "READY"
     #     return
     
     # # verification step 4
-    # led.control(LEDs[3], GPIO.HIGH)
+    # led.led_control(LEDs[3], GPIO.HIGH)
     # next_step_user = microphone.verify()
     # if first_user != next_step_user :
     #     current_mode = "READY"
@@ -120,7 +128,7 @@ def unlock():
 
     while time.time() - start_time < OPEN_TIME:
         led.led_blink()
-        time.sleep(0.1)
+        time.sleep(0.06)
 
     motor.close()
 
@@ -139,6 +147,7 @@ def main():
     # Initializing GPIOs
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(RESET_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
     led.init_gpio(LED1_PIN)
     led.init_gpio(LED2_PIN)
     led.init_gpio(LED3_PIN)
@@ -149,7 +158,7 @@ def main():
     ## Initialization of components
     print("Initializing ...")
     rfid.init()
-    fingerprint.init()
+    # fingerprint.init()
     # microphone.init()
     # camera.init()
 
@@ -161,7 +170,7 @@ def main():
         if current_mode == "READY":
             # reseting LEDs
             for l in LEDs:
-                led.control(l, GPIO.LOW)
+                led.led_control(l, GPIO.LOW)
 
             current_mode = "VERIFICATION"
 

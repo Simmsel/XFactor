@@ -35,7 +35,7 @@ def cleanup_gpio():
 
 
 def led_blink():
-
+    global cyclic_counter
     current_states = LED_matrix[cyclic_counter]
 
     for i in [0, 1, 2, 3]:

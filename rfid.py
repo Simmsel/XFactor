@@ -6,7 +6,6 @@
 # IMPORTS
 
 import time
-import RPi.GPIO as GPIO
 from mfrc522 import SimpleMFRC522
 
 
@@ -19,7 +18,6 @@ tag_database = {
 
 
 def init():
-    print("Initializing RFID-sensor connection")
     try:
         reader = SimpleMFRC522()
         print("Initialization of RFID-reader was successfull")
@@ -30,7 +28,6 @@ def init():
 
 
 def verify():
-    print("Bitte den RFID-Tag an das Lesegerät halten...")
     reader = SimpleMFRC522()
     # Lese die Tag-Nummer ein
     tag_id, _ = reader.read()
@@ -40,4 +37,4 @@ def verify():
     if tag_id in tag_database:
         return tag_database[tag_id]
     else:
-        return "Unbekannter Tag"
+        return "UNKNOWN"
