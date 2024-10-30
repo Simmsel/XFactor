@@ -20,7 +20,7 @@ TAG_LISTS = [
 ]
 
 
-def init_rfid_reader():
+def init():
     print("Initializing RFID-sensor connection")
     try:
         reader = SimpleMFRC522()

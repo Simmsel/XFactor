@@ -6,7 +6,7 @@ import time
 Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
 
 
-def init_fingerprint_sensor():
+def init():
     try:
         print("Initializing fingerprint sensor connection")
         f = PyFingerprint('/dev/ttyS0', 57600, 0xFF, 0x01)  # Die Parameter können je nach Konfiguration variieren
