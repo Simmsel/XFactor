@@ -1,4 +1,4 @@
-from picamera2 import Picamera2, Picamera2Error
+from picamera2 import Picamera2
 from datetime import datetime
 import os
 
@@ -8,16 +8,13 @@ import os
 Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
 
 def init():
-    try:
-        camera = Picamera2()
-        config = camera.create_still_configuration()
-        camera.configure(config)
-        camera.start()
-        print("Camera initialization successfull")
-        return camera
-    except Picamera2Error as e:
-        print(f"Error: {e}")
-        return None
+
+    camera = Picamera2()
+    config = camera.create_still_configuration()
+    camera.configure(config)
+    camera.start()
+    print("Camera initialization successfull")
+    return camera
 
 
 def take_picture(save_path="~/Desktop/Pictures"):
