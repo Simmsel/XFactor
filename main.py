@@ -53,10 +53,11 @@ OPEN_TIME = 5 # specified in seconds
 # Callback-Funktion für den Knopf-Interrupt
 
 def button_press_callback(channel):
+    print("button detected, hold 5 seconds for reboot")
     hold_start = time.time()
 
     # Check for 5 seconds button press
-    while GPIO.input(RESET_BUTTON_PIN) == GPIO.HIGH:
+    while GPIO.input(RESET_BUTTON_PIN) == GPIO.LOW:
         if time.time() - hold_start >= 5:
             print("Reboot initiated...")
                 
@@ -65,9 +66,7 @@ def button_press_callback(channel):
         time.sleep(0.1)  # Polling-Intervall
 
 
-
-
-
+GPIO.add_event_detect(RESET_BUTTON_PIN, GPIO.FALLING, callback=button_press_callback, bouncetime=200)
 
 
 def identify():
