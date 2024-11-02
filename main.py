@@ -38,15 +38,10 @@ import RPi.GPIO as GPIO
 
 
 
-
 # VARIABLES
 Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
 current_mode = "READY"
 OPEN_TIME = 5 # specified in seconds
-
-
-
-
 
 
 
@@ -66,7 +61,7 @@ def button_press_callback(channel):
         time.sleep(0.1)  # Polling-Intervall
 
 
-GPIO.add_event_detect(RESET_BUTTON_PIN, GPIO.FALLING, callback=button_press_callback, bouncetime=200)
+
 
 
 def identify():
@@ -146,7 +141,8 @@ def main():
     # Initializing GPIOs
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(RESET_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
+    GPIO.add_event_detect(RESET_BUTTON_PIN, GPIO.FALLING, callback=button_press_callback, bouncetime=200)
+    
     led.init_gpio(LED1_PIN)
     led.init_gpio(LED2_PIN)
     led.init_gpio(LED3_PIN)
