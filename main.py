@@ -159,8 +159,8 @@ def main():
     print("Initializing ...")
     rfid.init()
     # fingerprint.init()
+    camera.init()
     # microphone.init()
-    # camera.init()
 
     ## Start of loop
     global current_mode
@@ -189,4 +189,5 @@ if __name__ == "__main__":
         print("Program terminated manually")
     finally:
         GPIO.cleanup()
+        camera.camera.stop()
 
