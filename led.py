@@ -30,10 +30,6 @@ def led_control(pin: int, mode=GPIO.LOW):
     GPIO.output(pin, mode)
 
 
-def cleanup_gpio():
-    GPIO.cleanup()
-
-
 def led_blink():
     global cyclic_counter
     current_states = LED_matrix[cyclic_counter]

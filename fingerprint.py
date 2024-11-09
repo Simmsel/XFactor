@@ -7,10 +7,10 @@ Original file is located at
     https://colab.research.google.com/drive/1qbcpqQ9uAZX9maXXParambIm-zca2X9R
 """
 
+
 from pyfingerprint.pyfingerprint import PyFingerprint
 import time
-
-Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
+import serial
 
 # Initialize fingerprint sensor
 def init():
@@ -27,44 +27,50 @@ def init():
         print(f"Error during initialization of fingerprint sensor: {e}")
         return None
 
+
 # Enroll a new fingerprint at a specified location
-def enroll_fingerprint(sensor, location):
-    """Enrolls a new fingerprint at the specified location"""
-    print("Place your finger on the sensor...")
+def enroll(sensor,location):        
+#enrolls a new fingerprint at the specified location
+    try: 
+        print(f"{sensor}")
+        print("Place your finger on the sensor...")
+        # Step 1: Capture fingerprint image
+        while not sensor.readImage():
+            print("Ich seh keinen finger du spasst")
+            pass
 
-    # Step 1: Capture fingerprint image
-    while not sensor.readImage():
-        pass
+        # Step 2: Convert the image to a template
+        sensor.convertImage(0x01)
 
-    # Step 2: Convert the image to a template
-    sensor.convertImage(0x01)
+        print("Remove your finger...")
+        time.sleep(1)  # Pause for finger removal
 
-    print("Remove your finger...")
-    time.sleep(1)  # Pause for finger removal
+        # Step 3: Request second image for a matching template
+        print("Place the same finger again...")
+        while not sensor.readImage():
+            pass
 
-    # Step 3: Request second image for a matching template
-    print("Place the same finger again...")
-    while not sensor.readImage():
-        pass
+        sensor.convertImage(0x02)
 
-    sensor.convertImage(0x02)
+        # Step 4: Create a model from the two images
+        if sensor.createTemplate() < 0:
+            print("Error creating fingerprint model.")
+            return False
 
-    # Step 4: Create a model from the two images
-    if sensor.createTemplate() < 0:
-        print("Error creating fingerprint model.")
-        return False
+        # Step 5: Store the model in the specified location
+        if not sensor.storeTemplate(location):
+            print("Error storing fingerprint.")
+            return False
 
-    # Step 5: Store the model in the specified location
-    if not sensor.storeTemplate(location):
-        print("Error storing fingerprint.")
-        return False
-
-    print(f"Fingerprint enrolled successfully at ID {location}")
-    return True
-
+        print(f"Fingerprint enrolled successfully at ID {location}")
+        return True
+    except Exception as e:
+            print(f"Error during initialization of fingerprint sensor: {e}")
+            return None
+           
 # Function to search for a fingerprint and display user ID
-def get_fingerprint(sensor, Users):
-    """Searches for a fingerprint and displays the user ID"""
+def get(sensor, fingerprint_database):
+#Searches for a fingerprint and displays the user ID
     print("Place your finger on the sensor...")
 
     # Wait until the fingerprint is detected
@@ -79,8 +85,8 @@ def get_fingerprint(sensor, Users):
     position_number = result[0]
     confidence = result[1]
 
-    if position_number >= 0:
-        user_name = Users[position_number] if position_number < len(Users) else "Unknown User"
+    if position_number > 0:
+        user_name = fingerprint_database[position_number] if position_number < len(fingerprint_database) else "Unknown User"
         print(f"Fingerprint recognized! User: {user_name}, with confidence: {confidence}")
         return user_name
     else:
@@ -89,11 +95,25 @@ def get_fingerprint(sensor, Users):
 
 def verify():
     # Main loop to test the sensor
+    fingerprint_database = [
+    "FingerprintTemplate",
+    "Jonathan", # ID 1 right pointy finger 
+    "Jonathan", # ID 2 right tumb
+    "Jonathan", # ID 3 left pointy finger
+    "Jonathan", # ID 4 right tumb
+    "Simon", # ID5 right index
+    "Simon", #ID6 right index
+    "Simon", #ID7 right thumb
+    "Simon", #ID8 left index
+    
+    "Gabriel", 
+    "Sonstige"]
+    
     sensor = PyFingerprint('/dev/serial0', 57600,  0xFFFFFFFF, 0x00000000)
     if sensor:
         while True:
             print("Searching for fingerprint...")
-            user_name = get_fingerprint(sensor, Users)
+            user_name = get(sensor, fingerprint_database)
             if user_name:
                 print(f"Welcome, {user_name}!")
                 return user_name

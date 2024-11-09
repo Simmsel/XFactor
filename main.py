@@ -1,7 +1,7 @@
 ## main script to run on the raspi
 
 # GPIO PINS
-RESET_BUTTON_PIN = 6
+BUTTON_PIN = 26
 SERVO_PIN = 13
 LED1_PIN = 17
 LED2_PIN = 27
@@ -27,7 +27,6 @@ import led
 import motor
 
 
-
 ## IMPORT Libraries
 
 import tensorflow as tf
@@ -35,6 +34,7 @@ import numpy as np
 import time
 import os
 import RPi.GPIO as GPIO
+from gpiozero import Button
 
 
 
@@ -45,22 +45,12 @@ OPEN_TIME = 5 # specified in seconds
 
 
 
-# Callback-Funktion für den Knopf-Interrupt
-
-def button_press_callback(channel):
-    print("button detected, hold 5 seconds for reboot")
-    hold_start = time.time()
-
-    # Check for 5 seconds button press
-    while GPIO.input(RESET_BUTTON_PIN) == GPIO.LOW:
-        if time.time() - hold_start >= 5:
-            print("Reboot initiated...")
-                
-            os.system("sudo reboot")
-            return
-        time.sleep(0.1)  # Polling-Intervall
-
-
+def on_button_held():
+    print("Button pressed for 5 seconds, initiating reboot...")
+    # os.system("sudo reboot")
+    
+def on_button_released():
+    print("Button released.")
 
 
 
@@ -69,7 +59,7 @@ def identify():
     first_user = "Nobody"
     next_step_user = ""
 
-    helpers.clear_screen()
+    # helpers.clear_screen()
 
     # verification step 1, return value string of user name
     print("Bitte den RFID-Tag an das Lesegerät halten...")
@@ -83,11 +73,11 @@ def identify():
     
 
     # # verification step 2
-    # led.led_control(LEDs[1], GPIO.HIGH)
-    # next_step_user = fingerprint.verify()
-    # if first_user != next_step_user :
-    #     current_mode = "READY"
-    #     return
+    led.led_control(LEDs[1], GPIO.HIGH)
+    next_step_user = fingerprint.verify()
+    if first_user != next_step_user :
+        current_mode = "READY"
+        return
     
     # # verification step 3
     # led.led_control(LEDs[2], GPIO.HIGH)
@@ -134,26 +124,28 @@ def unlock():
 
 
 def main():
-
+    fingerprint.init()
     ## Eingabezeile leeren
-    helpers.clear_screen()
-
+    # helpers.clear_screen()
+    # GPIO.cleanup()
+    
     # Initializing GPIOs
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(RESET_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(RESET_BUTTON_PIN, GPIO.FALLING, callback=button_press_callback, bouncetime=200)
+    
     
     led.init_gpio(LED1_PIN)
     led.init_gpio(LED2_PIN)
     led.init_gpio(LED3_PIN)
     led.init_gpio(LED4_PIN)
 
-
+    button = Button(26, pull_up=True, bounce_time=0.2, hold_time=5)
+    button.when_held = on_button_held
+    button.when_released = on_button_released
 
     ## Initialization of components
     print("Initializing ...")
     rfid.init()
-    # fingerprint.init()
+    
     camera.init()
     # microphone.init()
 
