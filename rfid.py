@@ -6,6 +6,8 @@ tag_database = {
     1069488694246: "Simon",
     588620194713: "Jonathan",
     932268172086: "Nico"
+    # : "MoritzG",
+    # : "MoritzR"
 }
 
 
