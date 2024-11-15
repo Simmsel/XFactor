@@ -11,6 +11,7 @@ Original file is located at
 from pyfingerprint.pyfingerprint import PyFingerprint
 import time
 import serial
+import RPi.GPIO as GPIO
 
 # Initialize fingerprint sensor
 def init():
@@ -94,6 +95,8 @@ def get(sensor, fingerprint_database):
         return False
 
 def verify():
+    
+    GPIO.setmode(GPIO.BCM)
     # Main loop to test the sensor
     fingerprint_database = [
     "FingerprintTemplate",

@@ -37,7 +37,6 @@ import RPi.GPIO as GPIO
 from gpiozero import Button
 
 
-
 # VARIABLES
 Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
 current_mode = "READY"
@@ -47,7 +46,7 @@ OPEN_TIME = 5 # specified in seconds
 
 def on_button_held():
     print("Button pressed for 5 seconds, initiating reboot...")
-    # os.system("sudo reboot")
+    os.system("sudo reboot")
     
 def on_button_released():
     print("Button released.")
@@ -74,17 +73,17 @@ def identify():
 
     # # verification step 2
     led.led_control(LEDs[1], GPIO.HIGH)
-    next_step_user = fingerprint.verify()
+    # next_step_user = fingerprint.verify()
+    #if first_user != next_step_user :
+    #    current_mode = "READY"
+    #    return
+    
+    # verification step 3
+    led.led_control(LEDs[2], GPIO.HIGH)
+    next_step_user = camera.verify()
     if first_user != next_step_user :
         current_mode = "READY"
         return
-    
-    # # verification step 3
-    # led.led_control(LEDs[2], GPIO.HIGH)
-    # next_step_user = camera.verify()
-    # if first_user != next_step_user :
-    #     current_mode = "READY"
-    #     return
     
     # # verification step 4
     # led.led_control(LEDs[3], GPIO.HIGH)
@@ -124,9 +123,9 @@ def unlock():
 
 
 def main():
-    fingerprint.init()
+
     ## Eingabezeile leeren
-    # helpers.clear_screen()
+    helpers.clear_screen()
     # GPIO.cleanup()
     
     # Initializing GPIOs
@@ -144,8 +143,8 @@ def main():
 
     ## Initialization of components
     print("Initializing ...")
-    rfid.init()
-    
+    # rfid.init()
+    # fingerprint.init()
     camera.init()
     # microphone.init()
 
