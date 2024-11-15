@@ -5,9 +5,12 @@ import RPi.GPIO as GPIO
 tag_database = {
     1069488694246: "Simon",
     588620194713: "Jonathan",
+<<<<<<< HEAD
     932268172086: "Nico",
     108591145915: "MoritzR",
     660828676947: "MoritzG"
+=======
+>>>>>>> aef3af3cb209eda02aa4fa5ce2ccbd9799fe6d52
 }
 
 

@@ -2,7 +2,7 @@ tensorflow
 numpy
 pipreqs
 pyaudio
-picamera
+picamera2
 mfrc522
 spidev
 pyfingerprint
