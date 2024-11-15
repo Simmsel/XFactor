@@ -52,20 +52,19 @@ OPEN_TIME = 5 # specified in seconds
 def on_button_held():
     print("Button pressed for 5 seconds, initiating reboot...")
     os.system("sudo reboot")
-<<<<<<< HEAD
-    
-=======
->>>>>>> aef3af3cb209eda02aa4fa5ce2ccbd9799fe6d52
+
+
 def on_button_released():
     print("Button released.")
 
 
 def identify():
+    
     global current_mode
     first_user = "UNKNOWN"
     next_step_user = ""
 
-    # helpers.clear_screen()
+    helpers.clear_screen()
 
     # verification step 1, return value string of user name
     print("Please present your RFID Tag to the sensor...")
@@ -79,18 +78,21 @@ def identify():
     print(f"Hello, {first_user}! Please continue with the verification steps.")
     speaker.play_sound( PATH_AUDIO + first_user + ".wav" )
 
-    # # verification step 2
+
+
+    ## verification step 2
     led.led_control(LEDs[1], GPIO.HIGH)
+    # speaker.play_sound( PATH_AUDIO + PATH_PRESENT_FINGER )
     # next_step_user = fingerprint.verify()
-    #if first_user != next_step_user :
-    #    current_mode = "READY"
-    #    return
+    # if first_user != next_step_user :
+    #     current_mode = "READY"
+    #     return
+    
+    
     
     # verification step 3
     led.led_control(LEDs[2], GPIO.HIGH)
     next_step_user = camera.verify()
-    speaker.play_sound( PATH_AUDIO + PATH_PRESENT_FINGER )
-    next_step_user = fingerprint.verify()
 
     if first_user != next_step_user :
         current_mode = "READY"
@@ -148,7 +150,6 @@ def main():
     print("Initializing ...")
 
     # rfid.init()
-
     camera.init()
 
     speaker.play_sound( PATH_AUDIO + PATH_INIT_COMPLETE )
