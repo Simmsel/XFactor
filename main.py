@@ -67,27 +67,27 @@ def identify():
     helpers.clear_screen()
 
     # verification step 1, return value string of user name
-    print("Please present your RFID Tag to the sensor...")
-    speaker.play_sound( PATH_AUDIO + PATH_PRESENT_RFID )
+    print("Please present your Finger to the fingerprint-sensor...")
+    speaker.play_sound( PATH_AUDIO + PATH_PRESENT_FINGER )
     led.led_control(LEDs[0], GPIO.HIGH)
-    first_user = rfid.verify()
+    first_user = fingerprint.verify()
+    time.sleep(3)
     if first_user == "UNKNOWN":
         current_mode = "READY"
         return
     
     print(f"Hello, {first_user}! Please continue with the verification steps.")
     speaker.play_sound( PATH_AUDIO + first_user + ".wav" )
-
+    time.sleep(3)
 
 
     ## verification step 2
-    led.led_control(LEDs[1], GPIO.HIGH)
-    # speaker.play_sound( PATH_AUDIO + PATH_PRESENT_FINGER )
-    # next_step_user = fingerprint.verify()
-    # if first_user != next_step_user :
-    #     current_mode = "READY"
-    #     return
-    
+#    led.led_control(LEDs[1], GPIO.HIGH)
+#    # speaker.play_sound( PATH_AUDIO +  )
+#    next_step_user = microphone.verify()
+#    if first_user != next_step_user :
+#        current_mode = "READY"
+#        return
     
     
     # verification step 3
@@ -96,6 +96,8 @@ def identify():
 
     if first_user != next_step_user :
         current_mode = "READY"
+        print("Wrong Face Detected")
+        time.sleep(5)
         return
     
 
@@ -104,6 +106,7 @@ def identify():
 
     print("User verified, opening lock...")
     speaker.play_sound( PATH_AUDIO + PATH_OPEN )
+    time.sleep(3)
     current_mode = "OPENING"
 
 
@@ -130,9 +133,7 @@ def main():
 
     ## Eingabezeile leeren
     helpers.clear_screen()
-    fingerprint.init()
 
-    # GPIO.cleanup()
     
     # Initializing GPIOs
     GPIO.setmode(GPIO.BCM)
@@ -149,8 +150,8 @@ def main():
     ## Initialization of components
     print("Initializing ...")
 
-    # rfid.init()
     camera.init()
+    fingerprint.init()
 
     speaker.play_sound( PATH_AUDIO + PATH_INIT_COMPLETE )
 
