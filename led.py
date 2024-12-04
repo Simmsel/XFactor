@@ -4,6 +4,7 @@ from main import LED1_PIN
 from main import LED2_PIN
 from main import LED3_PIN
 from main import LED4_PIN
+from main import LED5_PIN
 from main import LEDs
 
 
