@@ -1,13 +1,20 @@
 import RPi.GPIO as GPIO
 
+
 from main import LED1_PIN
 from main import LED2_PIN
 from main import LED3_PIN
 from main import LED4_PIN
 from main import LED5_PIN
 from main import LEDs
-
-
+"""
+from example import LED1_PIN
+from example import LED2_PIN
+from example import LED3_PIN
+from example import LED4_PIN
+from example import LED5_PIN
+from example import LEDs
+"""
 LED_matrix = [
     [1, 0, 0, 0],
     [1, 1, 0, 0],

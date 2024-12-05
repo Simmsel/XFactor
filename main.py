@@ -19,8 +19,16 @@ PATH_AUDIO = "./data/Audio/"
 PATH_INIT_COMPLETE = "Initilization.wav"
 PATH_PRESENT_RFID = "RFID.wav"
 PATH_PRESENT_FINGER = "Finger.wav"
-PATH_CAMERA = "Camera.wav"
-PATH_OPEN = "Open.wav"
+PATH_CAMERA = "please look into the came.wav"
+PATH_MICROPHONE = "StartVoicerecognition.wav"
+PATH_MARIOKART = "mariostart.mp3"
+PATH_VOICE_DETECTED = "Voice-Passwort verified 1.wav"
+PATH_UNAUTHORIZED = "ALARM - Unauthorized.wav"
+PATH_FACEDETECTED = "Your face got successfull.wav"
+PATH_DOOR_SOUND = "194325262-open-bank-vault.mp3"
+PATH_OPEN = "X-Factor is opening now.wav"
+PATH_CLOSE_DOOR = "Please close the Door_Samuel.wav"
+PATH_NEW_AUT = "NewAuthentification.wav"
 
 
 
@@ -33,6 +41,7 @@ import helpers
 import speaker
 import led
 import motor
+import microphone
 
 
 ## IMPORT Libraries
@@ -49,6 +58,7 @@ from gpiozero import Button
 Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
 current_mode = "READY"
 OPEN_TIME = 5 # specified in seconds
+ifpressed = 0
 
 
 
@@ -61,13 +71,18 @@ def on_button_released():
     print("Button released.")
 
 
+def button_pressed():
+    global ifpressed
+    ifpressed = 1
+
+
 def identify():
     
     global current_mode
     first_user = "UNKNOWN"
     next_step_user = ""
 
-    helpers.clear_screen()
+    #helpers.clear_screen()
 
     # verification step 1, return value string of user name
     print("Please present your Finger to the fingerprint-sensor...")
@@ -77,50 +92,76 @@ def identify():
     if first_user == "UNKNOWN":
         led.led_control(LEDs[0], GPIO.LOW)
         led.led_control(LEDs[4], GPIO.HIGH)
+        speaker.play_sound( PATH_AUDIO + PATH_UNAUTHORIZED )
+        time.sleep(4)
         current_mode = "READY"
         return
     
     print(f"Hello, {first_user}! Please continue with the verification steps.")
-    speaker.play_sound( PATH_AUDIO + first_user + ".wav" )
+    speaker.play_sound( PATH_AUDIO + "hello_" + first_user + ".wav" )
     time.sleep(3)
 
 
     ## verification step 2
-#    led.led_control(LEDs[1], GPIO.HIGH)
-#    # speaker.play_sound( PATH_AUDIO +  )
-#    next_step_user = microphone.verify()
-#    if first_user != next_step_user :
-#        current_mode = "READY"
-#        return
+    led.led_control(LEDs[1], GPIO.HIGH)
+    speaker.play_sound( PATH_AUDIO + PATH_MICROPHONE)
+    time.sleep
+    print("please press the button and start to speak!")
+    global ifpressed
+    while ifpressed != 1:
+        time.sleep(0.1)
+    ifpressed = 0
+    speaker.play_sound( PATH_AUDIO + PATH_MARIOKART )
+    next_step_user = microphone.verify()
+    if first_user != next_step_user :
+        speaker.play_sound( PATH_AUDIO + PATH_UNAUTHORIZED )
+        time.sleep(4)
+        current_mode = "READY"
+        return
+    speaker.play_sound( PATH_AUDIO + PATH_VOICE_DETECTED)
+    time.sleep(3)
     
     
     # verification step 3
     led.led_control(LEDs[2], GPIO.HIGH)
+    speaker.play_sound( PATH_AUDIO + PATH_CAMERA)
+    time.sleep(1)
     next_step_user = camera.verify()
 
     if first_user != next_step_user :
+        speaker.play_sound( PATH_AUDIO + PATH_UNAUTHORIZED )
         current_mode = "READY"
         print("Wrong Face Detected")
-        time.sleep(5)
+        time.sleep(4)
         return
     
 
-    # led.led_control(LEDs[3], GPIO.HIGH)
+    led.led_control(LEDs[3], GPIO.HIGH)
+    speaker.play_sound( PATH_AUDIO + first_user + ".wav" )
+    time.sleep(1)
+    speaker.play_sound( PATH_AUDIO + PATH_FACEDETECTED )
+    time.sleep(4)
+    
+    
 
 
     print("User verified, opening lock...")
+    
     speaker.play_sound( PATH_AUDIO + PATH_OPEN )
     time.sleep(3)
     current_mode = "OPENING"
+    
+    
+    
 
 
 def unlock():
 
     print("Lock open for 5 secods...")
+    speaker.play_sound( PATH_AUDIO + PATH_DOOR_SOUND )
     motor.open()
 
-    # what to do while box is open
-    # speaker.playback(Opening sound) # optionally
+
     start_time = time.time()
 
     while time.time() - start_time < OPEN_TIME:
@@ -128,7 +169,19 @@ def unlock():
         time.sleep(0.06)
 
     motor.close()
-
+    speaker.play_sound( PATH_AUDIO + PATH_CLOSE_DOOR )
+    time.sleep(3)
+    
+    speaker.play_sound( PATH_AUDIO + PATH_NEW_AUT )
+    time.sleep(3)
+    
+    for i in led:
+        led.led_control(LEDs[i] , GPIO.HIGH)
+    
+    global ifpressed
+    while ifpressed != 1:
+        time.sleep(0.1)
+    ifpressed = 0
     global current_mode
     current_mode = "READY"
 
@@ -148,9 +201,10 @@ def main():
     led.init_gpio(LED4_PIN)
     led.init_gpio(LED5_PIN)
 
-    button = Button(26, pull_up=True, bounce_time=0.2, hold_time=5)
+    button = Button(BUTTON_PIN, pull_up=True, bounce_time=0.2, hold_time=5)
     button.when_held = on_button_held
     button.when_released = on_button_released
+    button.when_pressed = button_pressed
 
 
     ## Initialization of components

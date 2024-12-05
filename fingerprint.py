@@ -86,19 +86,18 @@ def get(sensor, fingerprint_database):
 
 def verify():
     GPIO.setmode(GPIO.BCM)
-    GPIO.cleanup()
     ser = serial.Serial('/dev/serial0', 57600,  timeout=1)    
     ser.reset_input_buffer()
     ser.reset_output_buffer()
     print("1")
-    time.sleep(1)
+    #time.sleep(1)
     try: 
         data = ser.read(10)
         print(data)
         print("2")
     finally: 
         ser.close()
-        time.sleep(1)
+        #time.sleep(1)
         ser.open() 
         print("3")
     
@@ -129,7 +128,7 @@ def verify():
     "MoritzR", #ID20 right index
     "Gabriel", 
     "Sonstige"]
-    time.sleep(1)
+    #time.sleep(1)
     sensor = PyFingerprint('/dev/serial0', 57600,  0xFFFFFFFF, 0x00000000)    
     print("4")
     
@@ -142,4 +141,4 @@ def verify():
                 return user_name
             else:
                 print("Fingerprint not recognized.")
-            time.sleep(1)
+            #time.sleep(1)

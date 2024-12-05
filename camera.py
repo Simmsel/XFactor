@@ -4,6 +4,7 @@ import os
 import cv2
 import torch
 import numpy as np
+import time
 from facenet_pytorch import InceptionResnetV1, MTCNN
 from torchvision import transforms
 from PIL import Image
@@ -125,7 +126,7 @@ def make_dataset(path, set_size = 20):
         print(f"Progress: {i} / {set_size}")
 
 
-def identify_person(embedding, train_embeddings, train_labels, threshold=0.25):
+def identify_person(embedding, train_embeddings, train_labels, threshold=0.30):
     min_distance = float('inf')
     label = "Unbekannt"
     probability = 0
@@ -154,8 +155,8 @@ def verify():
     ])
     
     # Lade die trainierten Embeddings und Labels
-    train_embeddings = np.load("data/train_embeddings.npy")
-    train_labels = np.load("data/train_labels.npy")
+    train_embeddings = np.load("data/updated_train_embeddings.npy")
+    train_labels = np.load("data/updated_labels.npy")
 
     # Zähler für erkannte Personen, speichert auch die letzte Übereinstimmung
     recognition_count = {label: {"count": 0, "last_prob": 0} for label in train_labels}
@@ -185,6 +186,12 @@ def verify():
                 x1, y1, x2, y2 = [int(coord) for coord in box]
                 if x1 < 0 or y1 < 0 or x2 > bgr_frame.shape[1] or y2 > bgr_frame.shape[0]:
                     continue  # Überspringe diese Box, wenn sie ungültig ist
+                    
+                box_width = x2 - x1
+                if box_width < 100:
+                    print(f"Gesicht zu weit entfernt, Breite {box_width}")
+                    time.sleep(1)
+                    continue
 
                 # Schneide das Gesicht aus
                 face = bgr_frame[y1:y2, x1:x2]  # Das Gesicht ausschneiden
@@ -243,33 +250,18 @@ def verify():
         count = values["count"]
         
         # Überprüfe, ob der count größer als 3 ist und ob es der höchste ist
-        if count > 3 and count > max_count:
+        if count > 2 and count > max_count:
             max_count = count
             max_label = label
 
     # Gib das Label mit dem höchsten count aus
     if max_label:
         print(f"Das Label mit dem höchsten count über 3 ist: {max_label} mit count {max_count}")
+        return max_label
     else:
         print("Kein Label hat einen count größer als 3.")
         
-    '''
-    detected_index = -1
-    detected_index = np.where(recognition_count[:, 1] > 3)[0]
-    if detected_index >= 0 and detected_index < length(Users) :
-        detected_user = Users[detected_index]
-    return detected_user
-   
-    value = 0
-    for value in recognition_count:
-        if value > 3:
-             detected_index = index
-             
-    if detected_index >= 0 and detected_index < length(Users) :
-        detected_user = Users[detected_index]
     
-    return detected_user
-    '''
     
 if __name__ == "__main__":
     init()
