@@ -12,7 +12,7 @@ LED5_PIN = 2 # RED
 
 LEDs = [LED1_PIN, LED2_PIN, LED3_PIN, LED4_PIN, LED5_PIN]
 
-OPEN_ANGLE = 30
+OPEN_ANGLE = 90
 CLOSE_ANGLE = 0
 
 PATH_AUDIO = "/home/pi/XFactor/data/Audio/"
@@ -177,7 +177,6 @@ def unlock():
     
     for i in LEDs:
         led.led_control(i, GPIO.HIGH)
-
     
     global ifpressed
     while ifpressed != 1:

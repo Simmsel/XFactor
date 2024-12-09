@@ -155,8 +155,8 @@ def verify():
     ])
     
     # Lade die trainierten Embeddings und Labels
-    train_embeddings = np.load("data/updated_train_embeddings.npy")
-    train_labels = np.load("data/updated_labels.npy")
+    train_embeddings = np.load("/home/pi/XFactor/data/updated_train_embeddings.npy")
+    train_labels = np.load("/home/pi/XFactor/data/updated_labels.npy")
 
     # Zähler für erkannte Personen, speichert auch die letzte Übereinstimmung
     recognition_count = {label: {"count": 0, "last_prob": 0} for label in train_labels}

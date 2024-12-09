@@ -176,8 +176,7 @@ def unlock():
     time.sleep(3)
     
     for i in LEDs:
-        led.led_control(i, GPIO.HIGH)
-
+        led.led_control(LEDs[i] , GPIO.HIGH)
     
     global ifpressed
     while ifpressed != 1:
