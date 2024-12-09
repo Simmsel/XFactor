@@ -9,7 +9,7 @@ DURATION = 10
 text_database = {
     "what's the craic": "Simon",
     "give me your money": "Jonathan",
-    "": "Nico",
+    "Belfast 24": "Nico",
     "hello mate": "MoritzR",
     "please open the box": "MoritzG"
 }
