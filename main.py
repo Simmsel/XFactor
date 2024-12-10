@@ -8,7 +8,7 @@ LED1_PIN = 17   # Yellow1
 LED2_PIN = 27   # Yellow2
 LED3_PIN = 22   # Yellow3
 LED4_PIN = 5    # Yellow4
-LED5_PIN = 2 # RED
+LED5_PIN = 2    # RED
 
 LEDs = [LED1_PIN, LED2_PIN, LED3_PIN, LED4_PIN, LED5_PIN]
 
@@ -31,12 +31,11 @@ PATH_CLOSE_DOOR = "Please close the Door_Samuel.wav"
 PATH_NEW_AUT = "NewAuthentification.wav"
 
 
-
 ## IMPORT Files
 
 import camera
 import fingerprint
-import rfid
+# import rfid
 import helpers
 import speaker
 import led
@@ -46,8 +45,6 @@ import microphone
 
 ## IMPORT Libraries
 
-import tensorflow as tf
-import numpy as np
 import time
 import os
 import RPi.GPIO as GPIO
@@ -55,34 +52,36 @@ from gpiozero import Button
 
 
 # VARIABLES
-Users = ["MoritzG", "MoritzR", "Jonathan", "Nico", "Simon", "Gabriel", "Sonstige"]
 current_mode = "READY"
 OPEN_TIME = 5 # specified in seconds
 ifpressed = 0
 
 
-
+# ISR to reboot once button held down
 def on_button_held():
     print("Button pressed for 5 seconds, initiating reboot...")
     os.system("sudo reboot")
 
 
+# ISR if button released
 def on_button_released():
     print("Button released.")
 
 
+# ISR for button pressed
 def button_pressed():
     global ifpressed
     ifpressed = 1
 
 
+# identify loop going through all security steps
 def identify():
     
     global current_mode
     first_user = "UNKNOWN"
     next_step_user = ""
 
-    #helpers.clear_screen()
+    helpers.clear_screen()
 
     # verification step 1, return value string of user name
     print("Please present your Finger to the fingerprint-sensor...")
@@ -135,32 +134,34 @@ def identify():
         time.sleep(4)
         return
     
+    # verification step 4
+    """
+    next_step_user = rfid.verify()
+    if first_user != next_step_user :
+        current_mode = "READY"
+        print("Wrong RFID Tag")
+        return
+    """
 
     led.led_control(LEDs[3], GPIO.HIGH)
     speaker.play_sound( PATH_AUDIO + first_user + ".wav" )
     time.sleep(1)
     speaker.play_sound( PATH_AUDIO + PATH_FACEDETECTED )
     time.sleep(4)
-    
-    
-
 
     print("User verified, opening lock...")
     
     speaker.play_sound( PATH_AUDIO + PATH_OPEN )
     time.sleep(3)
     current_mode = "OPENING"
-    
-    
-    
 
 
+# unlock the safe
 def unlock():
 
     print("Lock open for 5 secods...")
     speaker.play_sound( PATH_AUDIO + PATH_DOOR_SOUND )
     motor.open()
-
 
     start_time = time.time()
 
@@ -187,12 +188,11 @@ def unlock():
     current_mode = "READY"
 
 
+# main loop
 def main():
 
-    ## Eingabezeile leeren
     helpers.clear_screen()
-
-    
+ 
     # Initializing GPIOs
     GPIO.setmode(GPIO.BCM)
     
@@ -207,15 +207,14 @@ def main():
     button.when_released = on_button_released
     button.when_pressed = button_pressed
 
-
     ## Initialization of components
     print("Initializing ...")
 
     camera.init()
     fingerprint.init()
+    # rfid.init()
 
     speaker.play_sound( PATH_AUDIO + PATH_INIT_COMPLETE )
-
 
     ## Start of loop
     global current_mode

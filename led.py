@@ -1,19 +1,11 @@
 import RPi.GPIO as GPIO
 
-"""
 from main import LED1_PIN
 from main import LED2_PIN
 from main import LED3_PIN
 from main import LED4_PIN
 from main import LED5_PIN
 from main import LEDs
-"""
-from example import LED1_PIN
-from example import LED2_PIN
-from example import LED3_PIN
-from example import LED4_PIN
-from example import LED5_PIN
-from example import LEDs
 
 LED_matrix = [
     [1, 0, 0, 0],
@@ -28,16 +20,19 @@ LED_matrix = [
 cyclic_counter = 0
 
 
+# initialize a GPIO as output and low
 def init_gpio(pin: int):
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, GPIO.LOW)
 
 
+# write an output to a GPIO
 def led_control(pin: int, mode=GPIO.LOW):
     GPIO.output(pin, mode)
 
 
+# perform cyclical blinking
 def led_blink():
     global cyclic_counter
     current_states = LED_matrix[cyclic_counter]

@@ -1,37 +1,39 @@
 # XFactor
 
-Projektbeschreibung sowie Guide für GIT
+## Projektdescription
 
-## User Guide GitHUB
+### fingerprint.py
 
-### Synchronisierung Lokal + Setup
+This file includes functions to read a fingerprint into the database, and to verify a user and check whether his fingerprint is in the database
 
-einen lokalen Ordner auf eurem Rechner erstellen wo der ganze Code drin landen soll
+### camera.py
 
-> git mit den Standardeinstellungen installieren <https://git-scm.com/>
+This file performs the face detection by loading a pretrained net and performing the face detection, returning the name of a detected user
 
-im datei-explorer rechtsklick -> open git bash here
->`git clone https://github.com/Simmsel/XFactor`
+### led.py
 
-### Aktualisierungen vom server runterladen
+This file is used to control the LEDs
 
-diesen teil am besten jedes Mal / jeden Tag machen, bevor ihr selber zum coden anfängt, damit ihr den aktuellsten stand habt und es zu keinen problemen beim hochladen kommt
-im lokalen Ordner rechtsklick -> open git bash here  
-`git pull`
->Achtung, dieser Schritt überschreibt lokale Änderungen die nicht hochgeladen sind. Wenn ihr gleichzeitig mit wem anders was gecoded habt dann erst `git fetch` und `git merge` machen um konflikte zu lösen und dann erst committen und pushen
+### microphone.py
 
-### Status prüfen
+This file is performs the passphrase detection by loading a pretrained model and checking whos passphrase was spoken
 
-`git status`
-> schauen was aktuell geändert ist, ob ihr den aktuellen stand habt etc.
+### rfid.py
 
-### Eigene änderungen auf den server packen
+This file is used to verify a user by reading his RFID Tag and checking the database for matches
 
-1. lokale änderungen übertragen  
-`git add .`
+### speaker.py
 
-2. lokal comitten  
-`git commit -m "beschreibung was gemacht wurde"`
+This face is used to output sound
 
-3. änderungen auf den server pushen (wenn ihr euch sicher seid)  
-`git push origin main`
+### motor.py
+
+This file is used to control the servo motor with a PWM signal
+
+### helpers.py
+
+This file contains helping functions such as a function to clear the screen
+
+### main.py
+
+This file contains the main script

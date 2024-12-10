@@ -1,7 +1,9 @@
 import os
 
+
+# clear the terminal
 def clear_screen():
-    # Prüfen, welches Betriebssystem verwendet wird
+    # Check for the OS
     if os.name == 'nt':  # Windows
         os.system('cls')
     else:  # Linux und macOS

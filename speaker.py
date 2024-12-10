@@ -1,5 +1,7 @@
 import pygame
 
+
+# play an audio sound
 def play_sound(file_path):
 
     # initialize pygame

@@ -3,12 +3,38 @@ import time
 import serial
 import RPi.GPIO as GPIO
 
+fingerprint_database = [
+    "FingerprintTemplate",
+    "Jonathan", # ID 1 right pointy finger 
+    "Jonathan", # ID 2 right tumb
+    "Jonathan", # ID 3 left pointy finger
+    "Jonathan", # ID 4 right tumb
+    "Simon", # ID5 right index
+    "Simon", #ID6 right index
+    "Simon", #ID7 right thumb
+    "Simon", #ID8 left index
+    "MoritzG", #ID9 right thumb
+    "MoritzG", #ID10 right thumb
+    "MoritzG", #ID11 right index
+    "MoritzG", #ID12 right index
+    "Nico", #ID13 right thumb
+    "Nico", #ID14 right thumb
+    "Nico", #ID15 right index
+    "Nico", #ID16 right index
+    "MoritzR", #ID17 right thumb
+    "MoritzR", #ID18 right thumb
+    "MoritzR", #ID19 right index
+    "MoritzR", #ID20 right index
+    "Gabriel", 
+    "Sonstige"]
+
+
 # Initialize fingerprint sensor
 def init():
     try:
         print("Initializing fingerprint sensor connection")
-        # Initialize with device path and settings (adjust for your setup)
-        sensor = PyFingerprint('/dev/serial0', 57600,  0xFFFFFFFF, 0x00000000) # Baudrate might need to be adjusted: 9600 or 115200
+        # Initialize with device path and settings
+        sensor = PyFingerprint('/dev/serial0', 57600,  0xFFFFFFFF, 0x00000000)
         if not sensor.verifyPassword():
             print("Invalid password for fingerprint sensor")
             return None
@@ -21,7 +47,6 @@ def init():
 
 # Enroll a new fingerprint at a specified location
 def enroll(sensor,location):        
-#enrolls a new fingerprint at the specified location
     try: 
         print(f"{sensor}")
         print("Place your finger on the sensor...")
@@ -58,10 +83,11 @@ def enroll(sensor,location):
     except Exception as e:
             print(f"Error during initialization of fingerprint sensor: {e}")
             return None
-           
+
+ 
 # Function to search for a fingerprint and display user ID
 def get(sensor, fingerprint_database):
-#Searches for a fingerprint and displays the user ID
+
     print("Place your finger on the sensor...")
 
     # Wait until the fingerprint is detected
@@ -84,53 +110,25 @@ def get(sensor, fingerprint_database):
         print("Fingerprint not recognized.")
         return False
 
+
+# Read a fingerprint and verify the user
 def verify():
     GPIO.setmode(GPIO.BCM)
     ser = serial.Serial('/dev/serial0', 57600,  timeout=1)    
     ser.reset_input_buffer()
     ser.reset_output_buffer()
-    print("1")
-    #time.sleep(1)
+
     try: 
         data = ser.read(10)
         print(data)
-        print("2")
+
     finally: 
         ser.close()
-        #time.sleep(1)
         ser.open() 
-        print("3")
     
-    
-    
-    # Main loop to test the sensor
-    fingerprint_database = [
-    "FingerprintTemplate",
-    "Jonathan", # ID 1 right pointy finger 
-    "Jonathan", # ID 2 right tumb
-    "Jonathan", # ID 3 left pointy finger
-    "Jonathan", # ID 4 right tumb
-    "Simon", # ID5 right index
-    "Simon", #ID6 right index
-    "Simon", #ID7 right thumb
-    "Simon", #ID8 left index
-    "MoritzG", #ID9 right thumb
-    "MoritzG", #ID10 right thumb
-    "MoritzG", #ID11 right index
-    "MoritzG", #ID12 right index
-    "Nico", #ID13 right thumb
-    "Nico", #ID14 right thumb
-    "Nico", #ID15 right index
-    "Nico", #ID16 right index
-    "MoritzR", #ID17 right thumb
-    "MoritzR", #ID18 right thumb
-    "MoritzR", #ID19 right index
-    "MoritzR", #ID20 right index
-    "Gabriel", 
-    "Sonstige"]
-    #time.sleep(1)
+    global fingerprint_database
+
     sensor = PyFingerprint('/dev/serial0', 57600,  0xFFFFFFFF, 0x00000000)    
-    print("4")
     
     if sensor:
         while True:
@@ -141,4 +139,3 @@ def verify():
                 return user_name
             else:
                 print("Fingerprint not recognized.")
-            #time.sleep(1)
